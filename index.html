@@ -118,6 +118,26 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,248,245,.94);backdro
 .portrait{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
 .portrait img{width:100%;height:auto;display:block}
 
+
+/* ---------- до и после (шторка) ---------- */
+.ba{position:relative;max-width:900px;margin:26px auto 0;border-radius:var(--radius);overflow:hidden;
+    box-shadow:var(--shadow);aspect-ratio:568/221;user-select:none;touch-action:none;
+    cursor:ew-resize;background:#000}
+.ba .side{position:absolute;inset:0}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.ba .before{clip-path:inset(0 50% 0 0);transition:clip-path .05s linear}
+.ba .handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;
+    box-shadow:0 0 14px rgba(0,0,0,.45);pointer-events:none}
+.ba .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;
+    border-radius:50%;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.35);pointer-events:none;
+    display:grid;place-items:center;font-size:15px;color:var(--acc);font-weight:700;letter-spacing:-2px}
+.ba .lbl{position:absolute;bottom:14px;background:rgba(28,25,23,.82);color:#fff;font-size:12.5px;
+    font-weight:600;padding:6px 14px;border-radius:999px;pointer-events:none;backdrop-filter:blur(4px)}
+.ba .lbl.l{left:14px}
+.ba .lbl.r{right:14px}
+.ba-note{color:var(--muted);font-size:13.5px;margin:14px auto 0;max-width:900px}
+@media(max-width:760px){.ba .knob{width:40px;height:40px}.ba .lbl{font-size:11px;padding:5px 11px;bottom:10px}}
+
 .quote{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--acc);
   border-radius:var(--radius);padding:26px 30px}
 .quote p{font-family:var(--serif);font-size:19px;line-height:1.45;margin:0 0 12px}
@@ -256,13 +276,14 @@ footer h4{font-family:var(--serif);color:#fff;font-weight:400;font-size:17px;mar
 </section>
 
 <section id="podolog" style="background:var(--acc-soft)">
-  <div class="wrap split eq">
-    <div>
-      <span class="tag">Подология</span>
-      <h2>Вросший ноготь и проблемы стоп</h2>
+  <div class="wrap">
+    <span class="tag">Подология</span>
+    <h2>Вросший ноготь и проблемы стоп</h2>
+    <div class="split eq" style="align-items:start;margin-top:6px">
       <p class="lead">Если вы хотите сохранить ноготь, я советую обращаться к подологу.
         Редко, но бывают случаи, когда подолог направляет к хирургу — ситуация выходит за пределы
-        его компетенции. Это единичные случаи: в 99% при врастании ногтей подолог способен помочь.</p>
+        его компетенции. Это единичные случаи: в 99% при врастании ногтей подолог способен помочь.
+        <span style="display:block;margin-top:10px;font-size:13.5px">Из записи мастера во ВКонтакте.</span></p>
       <ul class="chk">
         <li>Убираю небольшой сегмент ногтя, который врастает</li>
         <li>Выявляю причину онихокриптоза</li>
@@ -270,13 +291,24 @@ footer h4{font-family:var(--serif);color:#fff;font-weight:400;font-size:17px;mar
         <li>Даю рекомендации по дальнейшим действиям</li>
         <li>При необходимости ставлю коррекционные системы по исправлению деформаций ногтя</li>
       </ul>
-      <p style="margin-top:16px;font-size:13.5px;color:var(--muted)">Из записи мастера во ВКонтакте.</p>
     </div>
-    <div>
-      <div class="portrait"><img src="images/pod_before_after.jpg" alt="Обработка стоп: до и после"></div>
-      <p class="cap">Работа с трещинами на стопе: до и после. Результат индивидуален и не гарантирован —
-        он зависит от исходного состояния и выполнения рекомендаций.</p>
+
+    <h3 style="max-width:900px;margin:38px auto 0;font-family:var(--serif);font-size:23px">Работа с трещинами на стопе</h3>
+    <p class="ba-note" style="margin-top:6px">Потяните ползунок. Слева — 8 ноября 2024, справа — 5 декабря 2024.</p>
+    <div class="ba" id="ba">
+      <div class="side">
+        <img src="images/ba_posle.jpg" alt="Стопа после обработки, 5 декабря 2024">
+        <span class="lbl r">После · 5.12.2024</span>
+      </div>
+      <div class="side before">
+        <img src="images/ba_do.jpg" alt="Стопа до обработки: трещины, 8 ноября 2024">
+        <span class="lbl l">До · 8.11.2024</span>
+      </div>
+      <div class="handle"></div>
+      <div class="knob">‹›</div>
     </div>
+    <p class="ba-note">Результат индивидуален и не гарантирован — он зависит от исходного состояния
+      и выполнения рекомендаций. Фотографии из карточки 2ГИС.</p>
   </div>
 </section>
 
@@ -434,6 +466,48 @@ footer h4{font-family:var(--serif);color:#fff;font-weight:400;font-size:17px;mar
   document.querySelectorAll('#menu a').forEach(function(a){
     a.addEventListener('click', function(){ document.getElementById('menu').classList.remove('open'); });
   });
+
+/* шторка «до / после» */
+(function () {
+  var box = document.getElementById('ba');
+  if (!box) return;
+  var before = box.querySelector('.before'),
+      handle = box.querySelector('.handle'),
+      knob   = box.querySelector('.knob');
+  function setPct(p) {
+    p = Math.max(2, Math.min(98, p));
+    before.style.clipPath = 'inset(0 ' + (100 - p) + '% 0 0)';
+    handle.style.left = p + '%';
+    knob.style.left = p + '%';
+  }
+  function fromEvent(e) {
+    var r = box.getBoundingClientRect();
+    var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+    setPct(x / r.width * 100);
+  }
+  var dragging = false;
+  box.addEventListener('pointerdown', function (e) { dragging = true; box.setPointerCapture(e.pointerId); fromEvent(e); });
+  box.addEventListener('pointermove', function (e) { if (dragging) fromEvent(e); });
+  box.addEventListener('pointerup',   function () { dragging = false; });
+  box.addEventListener('pointercancel', function () { dragging = false; });
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var shown = false;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (e.isIntersecting && !shown) {
+        shown = true;
+        var p = 50, dir = 1, steps = 0;
+        var t = setInterval(function () {
+          p += dir * 2; steps++;
+          if (p > 68) dir = -1;
+          if (steps > 34) { clearInterval(t); setPct(50); return; }
+          setPct(p);
+        }, 28);
+      }
+    });
+  }, { threshold: .4 });
+  io.observe(box);
+})();
 </script>
 </body>
 </html>
